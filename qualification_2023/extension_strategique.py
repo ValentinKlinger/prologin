@@ -1,5 +1,6 @@
 import math
 
+
 def ccw(p1, p2, p3):
     return (p2[0] - p1[0]) * (p3[1] - p1[1]) - (p2[1] - p1[1]) * (p3[0] - p1[0])
 
@@ -7,13 +8,16 @@ def ccw(p1, p2, p3):
 def convex_hull_graham(points):
     stack = []
     P0 = min(points, key=lambda p: (p[1], p[0]))
-    points.sort(key=lambda p: (math.atan2(p[1]-P0[1], p[0]-P0[0]), p[0]**2 + p[1]**2))
+    points.sort(
+        key=lambda p: (math.atan2(p[1] - P0[1], p[0] - P0[0]), p[0] ** 2 + p[1] ** 2)
+    )
 
     for point in points:
         while len(stack) > 1 and ccw(stack[-2], stack[-1], point) <= 0:
             stack.pop()
         stack.append(point)
     return stack
+
 
 def in_circle(d, point):
     x, y = point
@@ -24,9 +28,10 @@ def in_circle(d, point):
 def get_all_pairs(points):
     pairs = []
     for i in range(len(points)):
-        for j in range(i+1, len(points)):
+        for j in range(i + 1, len(points)):
             pairs.append((points[i], points[j]))
     return pairs
+
 
 def est_parallelogramme(A, B, C, D):
     AB = (B[0] - A[0], B[1] - A[1])
@@ -50,7 +55,7 @@ def intersection(points):
             b1 = y1 - m1 * x1
         else:
             m1 = None
-        for j in range(i+1, len(pairs)):
+        for j in range(i + 1, len(pairs)):
             x3, y3 = pairs[j][0]
             x4, y4 = pairs[j][1]
             if x4 - x3 != 0:
@@ -65,7 +70,7 @@ def intersection(points):
                     sortie.append((x1, m2 * x1 + b2))
                 else:
                     sortie.append((x3, m1 * x3 + b1))
-            elif not(m1 == 0 and m2 == 0):
+            elif not (m1 == 0 and m2 == 0):
                 if m1 - m2 == 0:
                     pass
                 else:
@@ -77,7 +82,7 @@ def intersection(points):
                     sortie.append(x3[0], x1[1])
                 else:
                     sortie.append(x1[0], x3[1])
-    
+
     arondi = []
     for i in sortie:
         arondi.append(tuple([round(j, 2) for j in i]))
@@ -86,10 +91,14 @@ def intersection(points):
 
 
 def nombre_aretes(enveloppe_convexe):
-    #breakpoint()
-    enveloppe_convexe = [enveloppe_convexe[i] for i in range(len(enveloppe_convexe)) if enveloppe_convexe[i] != enveloppe_convexe[i-1]]
+    # breakpoint()
+    enveloppe_convexe = [
+        enveloppe_convexe[i]
+        for i in range(len(enveloppe_convexe))
+        if enveloppe_convexe[i] != enveloppe_convexe[i - 1]
+    ]
     somets = []
-    #breakpoint()
+    # breakpoint()
     x1, y1 = enveloppe_convexe[-2]
     x2, y2 = enveloppe_convexe[-1]
     x3, y3 = enveloppe_convexe[0]
@@ -103,6 +112,7 @@ def nombre_aretes(enveloppe_convexe):
             somets.append(enveloppe_convexe[point])
     return len(somets)
 
+
 def aretes_minimales(d, n, points_de_controles):
     convex = convex_hull_graham(points_de_controles)
     n_convex = len(convex)
@@ -110,13 +120,19 @@ def aretes_minimales(d, n, points_de_controles):
         return n_convex
 
     points_possible = set([i for i in intersection(convex)])
-    return min([nombre_aretes(convex_hull_graham(convex + [i])) for i in points_possible if in_circle(d, i) == True])
+    return min(
+        [
+            nombre_aretes(convex_hull_graham(convex + [i]))
+            for i in points_possible
+            if in_circle(d, i) == True
+        ]
+    )
 
 
 if __name__ == "__main__":
     d = int(input())
     n = int(input())
-    points_de_controles =  [tuple(map(int, input().split())) for _ in range(n)]
+    points_de_controles = [tuple(map(int, input().split())) for _ in range(n)]
     n += 1
     points_de_controles.append((0, 0))
     print(aretes_minimales(d, n, points_de_controles))

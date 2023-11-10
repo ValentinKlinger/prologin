@@ -3,6 +3,8 @@ def ordre(k: int, n: int, tailles: list[int]):
     :param k: le nombre magique
     :param n: le nombre de personnes
     :param tailles: la liste des tailles de chaque personne
+
+
     >>> ordre(1, 5, [5, 4, 3, 2, 1])
     'OUI'
     >>> ordre(2, 5, [5, 4, 3, 2, 1])
@@ -19,11 +21,19 @@ def ordre(k: int, n: int, tailles: list[int]):
     'OUI'
     """
     ordre_final = sorted(tailles)
-    for personne in range(len(tailles)):
-        positions_final_possibles = [index for index, valeur in enumerate(ordre_final) if valeur == tailles[personne]]
-        for position_possible in positions_final_possibles:
-            if ((personne - position_possible) / k).is_integer():
-                ordre_final[position_possible] = -1
+
+    positions_initiales = {}
+    for idx_personne in range(len(tailles)):
+        if tailles[idx_personne] in positions_initiales:
+            positions_initiales[tailles[idx_personne]].append(idx_personne)
+        else:
+            positions_initiales[tailles[idx_personne]] = [idx_personne]
+
+    for rang_personne in range(len(ordre_final)): 
+        
+        for position_possible in range(len(positions_initiales[ordre_final[rang_personne]])):
+            if ((rang_personne - positions_initiales[ordre_final[rang_personne]][position_possible]) / k).is_integer():
+                positions_initiales[ordre_final[rang_personne]].pop(position_possible)
                 break
         else: 
             return 'NON'

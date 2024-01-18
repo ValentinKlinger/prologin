@@ -29,15 +29,22 @@ def ordre(k: int, n: int, tailles: list[int]):
         else:
             positions_initiales[tailles[idx_personne]] = [idx_personne]
 
-    for rang_personne in range(len(ordre_final)): 
-        
-        for position_possible in range(len(positions_initiales[ordre_final[rang_personne]])):
-            if ((rang_personne - positions_initiales[ordre_final[rang_personne]][position_possible]) / k).is_integer():
+    for rang_personne in range(len(ordre_final)):
+        for position_possible in range(
+            len(positions_initiales[ordre_final[rang_personne]])
+        ):
+            if (
+                (
+                    rang_personne
+                    - positions_initiales[ordre_final[rang_personne]][position_possible]
+                )
+                / k
+            ).is_integer():
                 positions_initiales[ordre_final[rang_personne]].pop(position_possible)
                 break
-        else: 
-            return 'NON'
-    return 'OUI'
+        else:
+            return "NON"
+    return "OUI"
 
 
 if __name__ == "__main__":

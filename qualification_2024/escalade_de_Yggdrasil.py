@@ -19,12 +19,12 @@ def le_plus_grand_saut(n: int, differences: list[int]) -> int:
     hauteurs = [1]
     for difference in range(len(differences)):
         hauteurs.append(hauteurs[difference] + differences[difference])
-    
+
     plus_haute_branche = hauteurs.index(max(hauteurs))
-    
+
     if plus_haute_branche == 0:
         return 0
-    return max(differences[:plus_haute_branche+1])
+    return max(differences[: plus_haute_branche + 1])
 
 
 if __name__ == "__main__":

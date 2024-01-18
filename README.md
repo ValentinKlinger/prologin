@@ -20,3 +20,6 @@ Mon parcours :
 - [x] Qualification
 - [x] Régionales
 - [ ] Final
+
+2024 :
+- [x] Qualification
